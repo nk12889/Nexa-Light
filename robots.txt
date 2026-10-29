@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /stitch_lumina_lighting_admin_panel/
+
+Sitemap: https://nexalight.com/sitemap.xml
