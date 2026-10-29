@@ -1,0 +1,134 @@
+[
+  {
+    "id": "1",
+    "title": "Burj Al-Noor Tower Facade",
+    "location": "Dubai, UAE",
+    "year": "2025",
+    "category": "Facade & Exterior",
+    "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&auto=format&fit=crop&q=80",
+    "product": "Linear NanoX Facade Profile",
+    "desc": "48,000 meters of precision DMX-512 addressable RGBW linear profiles illuminating a 72-story skyscraper with zero light pollution.",
+    "specs": "IP68 Marine-Grade • 4000K & RGBW • 120lm/W • Custom Glare Shielding"
+  },
+  {
+    "id": "2",
+    "title": "The Kyoto Zen Sanctuary",
+    "location": "Kyoto, Japan",
+    "year": "2024",
+    "category": "Landscape & Gardens",
+    "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80",
+    "product": "TerraSpot Pro Subsurface",
+    "desc": "Subtle 2700K warm brass inground uplights enhancing ancient moss gardens, stone pathways, and bamboo groves.",
+    "specs": "316 Stainless Steel • 2700K Warm White • 15° Narrow Beam • IP68 Submersible"
+  },
+  {
+    "id": "3",
+    "title": "Metropolitan Opera Atrium",
+    "location": "Vienna, Austria",
+    "year": "2025",
+    "category": "Indoor Luxury",
+    "image": "https://images.unsplash.com/photo-1519010470956-6d877008eaa4?w=1200&auto=format&fit=crop&q=80",
+    "product": "AeroTrim Architectural Cove",
+    "desc": "Seamless acoustic plaster cove lighting providing indirect 98 CRI illumination across dramatic arched ceilings.",
+    "specs": "98 CRI R9>90 • 0.1% Dim to Dark DALI-2 • Custom Radius Curved Extrusions"
+  },
+  {
+    "id": "4",
+    "title": "Celestia Fiber Optic Star Pool",
+    "location": "Maldives",
+    "year": "2024",
+    "category": "Fiber Optic Art",
+    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=80",
+    "product": "OpticStar Fiber Generator",
+    "desc": "1,200 PMMA end-emitting optical fibers embedded in black granite infinity pool tiles, replicating the northern equatorial night sky.",
+    "specs": "Zero Voltage Underwater • RGBW Metal-Halide Engine • IP65 Illuminator Housing"
+  },
+  {
+    "id": "5",
+    "title": "Nordic Contemporary Art Museum",
+    "location": "Oslo, Norway",
+    "year": "2025",
+    "category": "Indoor Luxury",
+    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&auto=format&fit=crop&q=80",
+    "product": "ArtLine Museum Track System",
+    "desc": "Museum-grade framing projectors with variable focal lenses and zero UV/IR emissions protecting priceless centuries-old canvases.",
+    "specs": "99 CRI • Zoom Lens 15°-45° • Lockable Pan/Tilt • Casambi Wireless Control"
+  },
+  {
+    "id": "6",
+    "title": "Marina Bay Esplanade Bridge",
+    "location": "Singapore",
+    "year": "2024",
+    "category": "Facade & Exterior",
+    "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&auto=format&fit=crop&q=80",
+    "product": "HydraBeam Exterior Flood",
+    "desc": "High-output architectural floodlights highlighting suspension cables and granite pillars with dynamic tidal color sequences.",
+    "specs": "IP66 / IK10 • Anti-Corrosion Marine Coating • DMX Dynamic Pixel Mapping"
+  },
+  {
+    "id": "7",
+    "title": "Villa Bellagio Botanical Gardens",
+    "location": "Lake Como, Italy",
+    "year": "2025",
+    "category": "Landscape & Gardens",
+    "image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&auto=format&fit=crop&q=80",
+    "product": "FloraGlow Tree Uplight Pro",
+    "desc": "Accented illumination of 200-year-old olive trees using adjustable glare-shielded brass spike projectors.",
+    "specs": "Solid Antique Brass • Honeycomb Louver Included • 3000K CRI 92"
+  },
+  {
+    "id": "8",
+    "title": "Symphony Hall Acoustic Canopy",
+    "location": "London, UK",
+    "year": "2025",
+    "category": "Indoor Luxury",
+    "image": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&auto=format&fit=crop&q=80",
+    "product": "LumiCell Linear Suspended",
+    "desc": "Architectural acoustic baffles integrated with low-glare dark-light louvers providing 500 lux at orchestra seating.",
+    "specs": "UGR<13 • Sound Absorption Class A • Custom Anodized Gunmetal Finish"
+  },
+  {
+    "id": "9",
+    "title": "Starlight Planetarium Dome",
+    "location": "Geneva, Switzerland",
+    "year": "2024",
+    "category": "Fiber Optic Art",
+    "image": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80",
+    "product": "OpticStar Multi-Strand System",
+    "desc": "Precision constellation mapping with twinkling scintillation wheel engines across an acoustic planetarium vault.",
+    "specs": "DMX Scintillation Control • 0.75mm & 1.5mm Mixed Fibers • Silent Convection Cooling"
+  },
+  {
+    "id": "10",
+    "title": "The Highline Elevated Walkway",
+    "location": "New York, USA",
+    "year": "2025",
+    "category": "Landscape & Gardens",
+    "image": "https://images.unsplash.com/photo-1508873696983-2df5c8b5fd6e?w=1200&auto=format&fit=crop&q=80",
+    "product": "PathGuard Vandal-Proof Bollard",
+    "desc": "Dark-sky compliant pedestrian path lighting with zero upward light spill, safeguarding native migratory birds.",
+    "specs": "IK10 Vandal Resistance • Dark-Sky Approved • Corten Steel Weathered Finish"
+  },
+  {
+    "id": "11",
+    "title": "Elysian Hotel Presidential Suites",
+    "location": "Zurich, Switzerland",
+    "year": "2025",
+    "category": "Indoor Luxury",
+    "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&auto=format&fit=crop&q=80",
+    "product": "NanoTrim Recessed Trimless",
+    "desc": "Minimalist 25mm aperture pinhole downlights disappearing into Venetian plaster ceilings while delivering warm dimming.",
+    "specs": "1800K-3000K Dim-to-Warm • 40° Medium Beam • Magnetic Toolless Engine"
+  },
+  {
+    "id": "12",
+    "title": "Azure Waterfront Promenade",
+    "location": "Sydney, Australia",
+    "year": "2024",
+    "category": "Facade & Exterior",
+    "image": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1200&auto=format&fit=crop&q=80",
+    "product": "AquaLinear IP68 Strip",
+    "desc": "Continuous salt-water resistant silicone extruded light ribbons embedded along coastal seawalls and harbor steps.",
+    "specs": "IP68 Submersible • 316L Stainless Steel Channel • UV & Salt Mist Immune"
+  }
+]

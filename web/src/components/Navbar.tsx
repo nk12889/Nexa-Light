@@ -1,0 +1,138 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { NAV_LINKS, PRODUCT_MENU, media } from "@/lib/site";
+import { ChevronDown, Download } from "./icons";
+
+export default function Navbar({ email, phone }: { email: string; phone: string }) {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(h > 0 ? (window.scrollY / h) * 100 : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+  }, [open]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || (href === "/products" && pathname.startsWith("/product/"));
+
+  return (
+    <>
+      <div className="fixed top-0 left-0 h-[3px] bg-accent z-[1000]" style={{ width: `${progress}%` }} aria-hidden />
+      <nav className={`fixed w-full top-0 z-[60] glass-nav ${open ? "menu-active" : ""} ${scrolled && !open ? "shadow-premium" : ""}`}>
+        <div className="w-full max-w-[100rem] mx-auto px-6 md:px-12 py-4 md:py-5 flex justify-between items-center relative z-[60]">
+          <Link href="/" className="relative z-[60] flex items-center group" aria-label="NexaLight home">
+            <Image
+              src={media("images/logo.png")}
+              alt="NexaLight Logo"
+              width={160}
+              height={40}
+              priority
+              unoptimized
+              className="h-8 md:h-10 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            />
+          </Link>
+
+          <div className="hidden md:flex text-sm font-medium items-center">
+            <div className="flex space-x-10 lg:space-x-12 items-center">
+              {NAV_LINKS.map((l) =>
+                l.href === "/products" ? (
+                  <div key={l.href} className="relative group py-2">
+                    <Link href="/products" className={`nav-link flex items-center gap-1 ${isActive("/products") ? "active" : ""}`}>
+                      Products
+                      <ChevronDown className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                    <div className="absolute top-full left-0 w-64 bg-white border border-black/5 shadow-premium-dark rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 overflow-hidden flex flex-col py-2 z-[70]">
+                      {PRODUCT_MENU.map((m, i) => (
+                        <Link
+                          key={m.href}
+                          href={m.href}
+                          className={`px-5 py-3 text-sm text-secondary hover:text-primary hover:bg-surfaceLight transition-colors ${i === 0 ? "font-medium border-b border-black/5" : ""}`}
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link key={l.href} href={l.href} className={`nav-link ${isActive(l.href) ? "active" : ""}`}>
+                    {l.label}
+                  </Link>
+                )
+              )}
+              <a
+                href="/catalogue"
+                target="_blank"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 bg-white/90 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 text-xs font-semibold tracking-wider uppercase shadow-sm"
+              >
+                <Download size={13} />
+                <span>Catalogue</span>
+              </a>
+            </div>
+          </div>
+
+          <button
+            className="md:hidden flex flex-col justify-center items-end w-8 h-8 z-[60] relative"
+            onClick={() => setOpen((o) => !o)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+          >
+            <span className="bg-primary w-6 h-[1.5px] transition-transform duration-500 mb-[5px]" style={{ transform: open ? "rotate(45deg) translate(4px, 4px)" : "none" }} />
+            <span className="bg-primary w-6 h-[1.5px] transition-transform duration-500" style={{ transform: open ? "rotate(-45deg) translate(1px, -1px)" : "none" }} />
+          </button>
+        </div>
+      </nav>
+
+      <div
+        className={`fixed inset-0 bg-background z-[55] flex flex-col justify-between px-8 pt-32 pb-12 md:hidden overflow-y-auto transition-opacity duration-500 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        aria-hidden={!open}
+      >
+        <div className="flex flex-col space-y-4 text-primary w-full">
+          {NAV_LINKS.map((l, i) => (
+            <div key={l.href} className="overflow-hidden">
+              <Link
+                href={l.href}
+                tabIndex={open ? 0 : -1}
+                className="block text-[3rem] tracking-tighter font-medium leading-[1.1] hover:text-accent transition-all duration-500"
+                style={{ transform: open ? "none" : "translateY(100%)", transitionDelay: open ? `${i * 50 + 100}ms` : "0ms" }}
+              >
+                {l.label}
+              </Link>
+            </div>
+          ))}
+          <div className="pt-4">
+            <a
+              href="/catalogue"
+              target="_blank"
+              tabIndex={open ? 0 : -1}
+              className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-primary text-white text-xs font-semibold tracking-widest uppercase shadow-xl hover:bg-accent hover:text-primary transition-all"
+            >
+              <span>Download Catalogue PDF</span>
+              <span>↓</span>
+            </a>
+          </div>
+        </div>
+        <div className="flex flex-col space-y-2 text-secondary text-sm font-medium">
+          <span>{email}</span>
+          <span>{phone}</span>
+        </div>
+      </div>
+    </>
+  );
+}
