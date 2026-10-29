@@ -1,4 +1,4 @@
-import { db, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, signIn, signOut, getSession, isAdmin, updateAdminLogin } from "../supabase-init.js";
+import { db, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, signIn, signOut, getSession, isAdmin, updateAdminLogin, uploadImage, deleteImage, importImage } from "../supabase-init.js";
 
         // Core DB variables
         let allProductsDb = {};
@@ -504,15 +504,7 @@ window.handleLogin = async function(e) {
                     await deleteDoc(doc(db, "products", id));
                     showToast("Product deleted");
                     
-                    oldImages.forEach(img => {
-                        if (img && img.startsWith('/uploads/')) {
-                             fetch('/api/delete.php', {
-                                 method: 'POST',
-                                 headers: { 'Content-Type': 'application/json' },
-                                 body: JSON.stringify({ file: img })
-                             }).catch(e => console.error("Cleanup error:", e));
-                        }
-                    });
+                    oldImages.forEach(img => deleteImage(img).catch(e => console.error("Cleanup error:", e)));
                     
                     loadDatabase();
                 } catch(err) {
@@ -937,7 +929,7 @@ window.handleLogin = async function(e) {
             const btn = document.getElementById("btn-migrate");
             const status = document.getElementById("migrate-status");
             
-            if (!confirm("This will scan all databases and download external images to Hostinger. Are you sure you want to start? Please do not close the browser.")) {
+            if (!confirm("This will scan all databases and copy external images into the site's image storage. Are you sure you want to start? Please do not close the browser.")) {
                 return;
             }
             
@@ -946,22 +938,9 @@ window.handleLogin = async function(e) {
             
             let totalMigrated = 0;
             
-            const isExternal = (url) => url && (url.startsWith('http://') || url.startsWith('https://')) && !url.includes('nexalight.in/uploads/');
+            const isExternal = (url) => url && (url.startsWith('http://') || url.startsWith('https://')) && !url.includes('/storage/v1/object/public/media/');
             
-            const migrateUrl = async (url) => {
-                try {
-                    const res = await fetch("/api/download_external.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ url: url })
-                    });
-                    const data = await res.json();
-                    if (data.success) return data.url;
-                    return url;
-                } catch(e) {
-                    return url;
-                }
-            };
+            const migrateUrl = importImage;
 
             try {
                 // Migrate Products
@@ -1091,19 +1070,11 @@ window.saveProduct = async function(e, isEdit) {
     for (let i = 0; i < tempUploadedImages.length; i++) {
         let item = tempUploadedImages[i];
         if (item && typeof item === 'object') {
-            const formData = new FormData();
-            formData.append("image", item, item.name || `cropped_${Date.now()}.jpg`);
             try {
-                const res = await fetch("/api/upload.php", { method: "POST", body: formData });
-                const data = await res.json();
-                if (data.success) {
-                    finalImages.push(data.url);
-                } else {
-                    showToast(data.error || "Image upload failed", "error");
-                    return; // Abort save on failure
-                }
+                finalImages.push(await uploadImage(item));
             } catch(err) {
-                showToast("Network error during upload", "error");
+                console.error(err);
+                showToast("Image upload failed", "error");
                 return; // Abort save on failure
             }
         } else if (typeof item === 'string' && item.trim()) {
@@ -1136,12 +1107,8 @@ window.saveProduct = async function(e, isEdit) {
         showToast("Product saved successfully!");
         
         for (let oldImg of tempInitialImages) {
-            if (oldImg && !finalImages.includes(oldImg) && oldImg.startsWith('/uploads/')) {
-                fetch('/api/delete.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ file: oldImg })
-                }).catch(e => console.error("Cleanup error:", e));
+            if (oldImg && !finalImages.includes(oldImg)) {
+                deleteImage(oldImg).catch(e => console.error("Cleanup error:", e));
             }
         }
         
@@ -1431,18 +1398,9 @@ window.uploadImageToServer = async function(inputElement, targetInputId) {
     const targetInput = document.getElementById(targetInputId);
     const origVal = targetInput.value;
     targetInput.value = "Uploading...";
-    const formData = new FormData();
-    formData.append("image", file);
     try {
-        const res = await fetch("/api/upload.php", { method: "POST", body: formData });
-        const data = await res.json();
-        if (data.success) {
-            targetInput.value = data.url;
-            targetInput.dispatchEvent(new Event("change"));
-            showToast("Image uploaded successfully!");
-        } else {
-            targetInput.value = origVal;
-            showToast(data.error || "Upload failed", "error");
-        }
-    } catch (e) { targetInput.value = origVal; showToast("Network error", "error"); }
+        targetInput.value = await uploadImage(file);
+        targetInput.dispatchEvent(new Event("change"));
+        showToast("Image uploaded successfully!");
+    } catch (e) { console.error(e); targetInput.value = origVal; showToast("Upload failed", "error"); }
 };

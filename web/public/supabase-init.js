@@ -125,3 +125,35 @@ export async function updateAdminLogin({ email, password }) {
     if (password) changes.password = password;
     if (Object.keys(changes).length) check(await supabase.auth.updateUser(changes));
 }
+
+// --- Images (Supabase Storage, public bucket "media") ---
+
+const MEDIA_BUCKET = "media";
+const MEDIA_PREFIX = `${SUPABASE_URL}/storage/v1/object/public/${MEDIA_BUCKET}/`;
+
+// Uploads an image File/Blob and returns its public URL.
+export async function uploadImage(file) {
+    const type = file.type || "image/jpeg";
+    const ext = (type.split("/")[1] || "jpg").replace("jpeg", "jpg");
+    const path = `uploads/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    check(await supabase.storage.from(MEDIA_BUCKET).upload(path, file, { contentType: type, cacheControl: "31536000" }));
+    return MEDIA_PREFIX + path;
+}
+
+// Deletes an image previously returned by uploadImage(); other URLs are ignored.
+export async function deleteImage(url) {
+    if (typeof url !== "string" || !url.startsWith(MEDIA_PREFIX)) return;
+    check(await supabase.storage.from(MEDIA_BUCKET).remove([decodeURIComponent(url.slice(MEDIA_PREFIX.length))]));
+}
+
+// Copies an external image into the bucket; returns the new URL, or the
+// original one if the source cannot be fetched (e.g. blocked by CORS).
+export async function importImage(url) {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) return url;
+        return await uploadImage(await res.blob());
+    } catch {
+        return url;
+    }
+}
