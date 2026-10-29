@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getBlogArticles, getCategories, getProducts } from "@/lib/data";
+import { getBlogArticles, getProducts } from "@/lib/data";
+import { DIVISIONS } from "@/lib/divisions";
 import { SITE_URL } from "@/lib/site";
 
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, categories, articles] = await Promise.all([getProducts(), getCategories(), getBlogArticles()]);
+  const [products, articles] = await Promise.all([getProducts(), getBlogArticles()]);
   const page = (path: string, priority: number, changeFrequency: "daily" | "weekly" | "monthly" = "weekly") => ({
     url: `${SITE_URL}${path}`,
     changeFrequency,
@@ -15,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page("/", 1, "daily"),
     page("/products", 0.9),
-    ...Object.keys(categories).map((c) => page(`/products?cat=${encodeURIComponent(c)}`, 0.8)),
+    ...DIVISIONS.map((d) => page(`/products/${d.slug}`, 0.9)),
     ...products.map((p) => page(`/product/${p.id}`, 0.8)),
     page("/gallery", 0.8),
     page("/blog", 0.8),

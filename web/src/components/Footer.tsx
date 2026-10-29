@@ -5,12 +5,12 @@ import { Instagram, LinkedIn } from "./icons";
 
 const COLUMNS = [
   {
-    title: "Instruments",
+    title: "Products",
     links: [
-      { href: "/products?cat=Facade%20Lighting", label: "Facade Systems" },
-      { href: "/products?cat=Landscape%20Lighting", label: "Landscape" },
-      { href: "/products?cat=Indoor%20Architectural%20Lighting", label: "Indoor Studio" },
-      { href: "/products?cat=Fiber%20Optic%20Lighting", label: "Fiber Optics" },
+      { href: "/products/facade-lighting", label: "Facade Lighting" },
+      { href: "/products/fiber-optic-lighting", label: "Fiber Optic Lighting" },
+      { href: "/products/landscape-lighting", label: "Landscape Lighting" },
+      { href: "/products/indoor-architectural-lighting", label: "Indoor Architectural" },
       { href: "/gallery", label: "Project Gallery" },
     ],
   },

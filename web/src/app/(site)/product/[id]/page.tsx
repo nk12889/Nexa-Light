@@ -7,6 +7,7 @@ import ProductTabs from "@/components/ProductTabs";
 import { ArrowLeft } from "@/components/icons";
 import { getProduct, getProducts } from "@/lib/data";
 import { SITE_URL, media } from "@/lib/site";
+import { divisionHref } from "@/lib/divisions";
 
 export const revalidate = 60;
 
@@ -111,7 +112,7 @@ export default async function ProductPage({ params }: Params) {
                 <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-accent mb-4">Related</h2>
                 <h3 className="text-4xl md:text-6xl font-medium tracking-tight text-primary">Similar Instruments.</h3>
               </div>
-              <Link href={`/products?cat=${encodeURIComponent(product.category)}`} className="text-sm font-medium uppercase tracking-widest border-b border-primary pb-1 hover:text-accent hover:border-accent transition-colors shrink-0">
+              <Link href={divisionHref(product.category)} className="text-sm font-medium uppercase tracking-widest border-b border-primary pb-1 hover:text-accent hover:border-accent transition-colors shrink-0">
                 View Category
               </Link>
             </div>

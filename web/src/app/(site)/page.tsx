@@ -4,17 +4,58 @@ import HeroCarousel from "@/components/HeroCarousel";
 import InstrumentsScroller from "@/components/InstrumentsScroller";
 import GalleryGrid from "@/components/GalleryGrid";
 import { BlogCard } from "@/components/cards";
-import { getBlogArticles, getCategories, getGallery, getProducts } from "@/lib/data";
+import { getBlogArticles, getGallery, getProducts } from "@/lib/data";
+import { DIVISIONS } from "@/lib/divisions";
 import { media } from "@/lib/site";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [products, categories, gallery, articles] = await Promise.all([getProducts(), getCategories(), getGallery(), getBlogArticles()]);
+  const [products, gallery, articles] = await Promise.all([getProducts(), getGallery(), getBlogArticles()]);
 
   return (
     <>
       <HeroCarousel />
+
+      <section className="py-20 md:py-32 px-6 md:px-12 bg-white relative overflow-hidden border-b border-black/5">
+        <div className="max-w-[100rem] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-end mb-12 md:mb-16 anim-fade-up">
+            <div className="lg:col-span-7">
+              <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] mb-5 text-accent">Our Divisions</h2>
+              <p className="text-4xl md:text-6xl font-medium tracking-tight text-primary leading-[1.05]">Four disciplines.<br />One standard of light.</p>
+            </div>
+            <p className="lg:col-span-5 text-secondary font-light text-lg leading-relaxed">
+              From the building envelope to the garden path and the rooms within, every NexaLight product belongs to one of four specialist divisions.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+            {DIVISIONS.map((d, i) => {
+              const items = products.filter((p) => p.category === d.category);
+              return (
+                <Link
+                  key={d.slug}
+                  href={`/products/${d.slug}`}
+                  className="group flex flex-col rounded-[1.75rem] overflow-hidden bg-background border border-black/5 hover:shadow-premium-hover transition-shadow duration-500 anim-fade-up"
+                  style={{ transitionDelay: `${i * 80}ms` }}
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-skeleton">
+                    <Image src={media(items.find((p) => p.heroImg)?.heroImg)} alt={d.category} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <span className="absolute top-5 left-5 text-[11px] font-bold text-white bg-black/40 rounded-full px-3 py-1">{d.number}</span>
+                  </div>
+                  <div className="flex-1 flex flex-col p-6 md:p-7">
+                    <h3 className="text-xl md:text-2xl font-medium tracking-tight text-primary mb-2 group-hover:text-accent transition-colors">{d.category}</h3>
+                    <p className="text-sm text-secondary font-light leading-relaxed mb-6">{d.tagline}</p>
+                    <div className="mt-auto flex items-center justify-between pt-5 border-t border-black/5 text-xs font-bold uppercase tracking-widest">
+                      <span className="text-secondary">{items.length} products</span>
+                      <span className="text-primary group-hover:translate-x-1 transition-transform">Explore →</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       <section className="pt-20 pb-16 md:pt-40 md:pb-20 px-0 md:px-12 bg-background relative z-10 overflow-hidden border-b border-black/5 bg-grid-premium">
         <div className="hero-bg-text" style={{ top: "20%", fontSize: "20vw" }}>PRECISION</div>
@@ -34,34 +75,6 @@ export default async function HomePage() {
         </InstrumentsScroller>
       </section>
 
-      <section className="py-24 md:py-40 px-6 md:px-12 bg-white relative overflow-hidden">
-        <div className="max-w-[100rem] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 anim-fade-up">
-            <div>
-              <h2 className="text-xs font-semibold uppercase tracking-widest mb-4 text-accent">Related Collections</h2>
-              <h3 className="text-4xl md:text-6xl font-medium tracking-tight text-primary">Explore Our Divisions.</h3>
-            </div>
-            <p className="text-secondary font-light max-w-sm mt-6 md:mt-0">Specialized lighting systems tailored for every architectural layer, from facade to interior.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {Object.entries(categories).map(([cat, subs], i) => (
-              <Link
-                key={cat}
-                href={`/products?cat=${encodeURIComponent(cat)}`}
-                className="group relative aspect-square rounded-[2rem] overflow-hidden shadow-premium hover:shadow-premium-dark transition-all duration-700 anim-fade-up bg-skeleton"
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <Image src={media(products.find((p) => p.category === cat)?.heroImg)} alt={cat} fill sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-                <div className="absolute inset-x-0 bottom-0 p-8 z-10">
-                  <h4 className="text-white text-xl font-medium mb-1">{cat}</h4>
-                  <p className="text-white/60 text-xs uppercase tracking-widest font-semibold">{subs.length} Specialties</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="py-24 md:py-48 px-6 md:px-12 bg-background relative border-t border-black/5">
         <div className="max-w-[100rem] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">

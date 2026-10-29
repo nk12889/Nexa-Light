@@ -23,10 +23,3 @@ export const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
-export const PRODUCT_MENU = [
-  { href: "/products", label: "All Products" },
-  { href: "/products?cat=Facade%20Lighting", label: "Facade Lighting" },
-  { href: "/products?cat=Fiber%20Optic%20Lighting", label: "Fiber Optic Lighting" },
-  { href: "/products?cat=Landscape%20Lighting", label: "Landscape Lighting" },
-  { href: "/products?cat=Indoor%20Architectural%20Lighting", label: "Indoor Architectural" },
-];
