@@ -38,7 +38,7 @@ export default function GalleryGrid({ projects, showFilters = false, limit, roun
   return (
     <>
       {showFilters && (
-        <section className="py-6 px-6 md:px-12 sticky top-[72px] md:top-[80px] z-30 border-b border-black/5 backdrop-blur-xl bg-background/80">
+        <section className="py-6 px-6 md:px-12 sticky top-[72px] md:top-[80px] z-30 border-b border-black/5 bg-background/95">
           <div className="max-w-[100rem] mx-auto flex flex-wrap items-center gap-2 md:gap-4">
             {categories.map((c) => (
               <button
@@ -69,7 +69,7 @@ export default function GalleryGrid({ projects, showFilters = false, limit, roun
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                 {proj.category && (
                   <div className="absolute top-6 left-6 z-10">
-                    <span className="px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest text-white border border-white/20">{proj.category}</span>
+                    <span className="px-3.5 py-1.5 rounded-full bg-black/40 text-[10px] font-bold uppercase tracking-widest text-white border border-white/20">{proj.category}</span>
                   </div>
                 )}
                 <div className="absolute bottom-6 left-6 right-6 z-10 text-white">
@@ -86,13 +86,13 @@ export default function GalleryGrid({ projects, showFilters = false, limit, roun
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setOpenId(null)} role="dialog" aria-modal="true" aria-label={open.title}>
+        <div className="fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-4" onClick={() => setOpenId(null)} role="dialog" aria-modal="true" aria-label={open.title}>
           <div className="grid grid-cols-1 lg:grid-cols-12 bg-white rounded-[2rem] overflow-hidden max-w-6xl w-full shadow-premium-dark border border-black/5 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="lg:col-span-7 bg-black/95 relative min-h-[350px] lg:min-h-[550px]">
               <Image src={media(open.image)} alt={open.title} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
               {open.category && (
                 <div className="absolute bottom-6 left-6 z-10">
-                  <span className="px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest text-white">{open.category}</span>
+                  <span className="px-3.5 py-1.5 rounded-full bg-black/40 text-[10px] font-bold uppercase tracking-widest text-white">{open.category}</span>
                 </div>
               )}
             </div>

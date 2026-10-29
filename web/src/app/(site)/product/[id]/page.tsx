@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: Params) {
       </section>
 
       <div className="fixed bottom-10 left-6 md:left-10 z-50">
-        <Link href="/products" className="bg-white/80 backdrop-blur-xl border border-black/10 px-6 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest text-primary shadow-2xl hover:bg-primary hover:text-white transition-all flex items-center gap-3 group">
+        <Link href="/products" className="bg-white/95 border border-black/10 px-6 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest text-primary shadow-2xl hover:bg-primary hover:text-white transition-all flex items-center gap-3 group">
           <ArrowLeft />
           <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 whitespace-nowrap">Back to Collection</span>
           <span className="sr-only">Back to collection</span>

@@ -8,7 +8,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const settings = await getSettings();
   return (
     <>
-      <div className="bg-noise" aria-hidden />
       <Navbar email={settings.email} phone={settings.phone} />
       <main>{children}</main>
       <SupportBanner />

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NAV_LINKS, PRODUCT_MENU, media } from "@/lib/site";
 import { ChevronDown, Download } from "./icons";
 
@@ -11,17 +11,28 @@ export default function Navbar({ email, phone }: { email: string; phone: string 
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null);
 
+  // Updates the progress bar directly (no React re-render per scroll frame),
+  // at most once per animation frame.
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50);
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
       const h = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(h > 0 ? (window.scrollY / h) * 100 : 0);
+      if (barRef.current) barRef.current.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
+      setScrolled(y > 50);
     };
-    onScroll();
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => setOpen(false), [pathname]);
@@ -34,7 +45,7 @@ export default function Navbar({ email, phone }: { email: string; phone: string 
 
   return (
     <>
-      <div className="fixed top-0 left-0 h-[3px] bg-accent z-[1000]" style={{ width: `${progress}%` }} aria-hidden />
+      <div ref={barRef} className="fixed top-0 left-0 w-full h-[3px] bg-accent z-[1000] origin-left will-change-transform" style={{ transform: "scaleX(0)" }} aria-hidden />
       <nav className={`fixed w-full top-0 z-[60] glass-nav ${open ? "menu-active" : ""} ${scrolled && !open ? "shadow-premium" : ""}`}>
         <div className="w-full max-w-[100rem] mx-auto px-6 md:px-12 py-4 md:py-5 flex justify-between items-center relative z-[60]">
           <Link href="/" className="relative z-[60] flex items-center group" aria-label="NexaLight home">

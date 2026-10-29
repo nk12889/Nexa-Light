@@ -4,7 +4,11 @@ const nextConfig: NextConfig = {
   // Shared hosting limits processes: build with a single worker.
   experimental: { cpus: 1 },
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP only: AVIF encoding is slow on shared hosting CPUs.
+    formats: ["image/webp"],
+    deviceSizes: [640, 828, 1080, 1280, 1920],
+    imageSizes: [64, 128, 256, 384],
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       { protocol: "https", hostname: "nexalight.in" },
       { protocol: "https", hostname: "www.nexalight.in" },

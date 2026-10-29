@@ -104,7 +104,7 @@ export default async function AboutPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {VALUES.map((v, i) => (
-              <div key={v.title} className="bg-white/50 backdrop-blur-xl p-12 rounded-[2.5rem] border border-black/5 anim-fade-up" style={{ transitionDelay: `${(i + 1) * 100}ms` }}>
+              <div key={v.title} className="bg-white/70 p-12 rounded-[2.5rem] border border-black/5 anim-fade-up" style={{ transitionDelay: `${(i + 1) * 100}ms` }}>
                 <div className="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center mb-8 shadow-xl">
                   <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" d={v.icon} />

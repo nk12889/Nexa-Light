@@ -74,10 +74,10 @@ export default function ProductMedia({ images, name }: { images: string[]; name:
         )}
         {many && (
           <>
-            <button onClick={() => go(index - 1)} aria-label="Previous image" className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-primary flex items-center justify-center backdrop-blur-md transition-all z-20 border border-white/40 shadow-md">
+            <button onClick={() => go(index - 1)} aria-label="Previous image" className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-primary flex items-center justify-center transition-all z-20 border border-white/40 shadow-md">
               <ChevronLeft size={20} />
             </button>
-            <button onClick={() => go(index + 1)} aria-label="Next image" className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 text-primary flex items-center justify-center backdrop-blur-md transition-all z-20 border border-white/40 shadow-md">
+            <button onClick={() => go(index + 1)} aria-label="Next image" className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-primary flex items-center justify-center transition-all z-20 border border-white/40 shadow-md">
               <ChevronRight size={20} />
             </button>
           </>

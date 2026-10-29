@@ -16,7 +16,7 @@ export function ProductCard({ p, index = 0 }: { p: Product; index?: number }) {
         />
         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
         <div className="absolute top-5 left-5">
-          <span className="bg-white/90 backdrop-blur-md text-[8px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full text-primary shadow-sm border border-black/5">
+          <span className="bg-white/95 text-[8px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full text-primary shadow-sm border border-black/5">
             {p.subcategory || p.category}
           </span>
         </div>
@@ -42,7 +42,7 @@ export function BlogCard({ art, index = 0, rounded = "rounded-[2rem]" }: { art: 
       <div className="aspect-[16/10] w-full overflow-hidden relative bg-skeleton">
         <Image src={media(art.image)} alt={art.title} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
         <div className="absolute top-4 left-4 z-10">
-          <span className="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest text-primary shadow-sm">{art.category}</span>
+          <span className="px-3.5 py-1.5 rounded-full bg-white/95 text-[10px] font-bold uppercase tracking-widest text-primary shadow-sm">{art.category}</span>
         </div>
       </div>
       <div className="p-8 flex-1 flex flex-col justify-between">

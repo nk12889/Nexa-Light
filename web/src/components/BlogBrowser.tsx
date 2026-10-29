@@ -12,7 +12,7 @@ export default function BlogBrowser({ articles }: { articles: BlogArticle[] }) {
 
   return (
     <>
-      <section className="py-6 px-6 md:px-12 sticky top-[72px] md:top-[80px] z-30 border-b border-black/5 backdrop-blur-xl bg-background/80">
+      <section className="py-6 px-6 md:px-12 sticky top-[72px] md:top-[80px] z-30 border-b border-black/5 bg-background/95">
         <div className="max-w-[100rem] mx-auto flex flex-wrap items-center gap-2 md:gap-4">
           {categories.map((c) => (
             <button

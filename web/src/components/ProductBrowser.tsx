@@ -94,7 +94,7 @@ export function ProductBrowser({ products, categories, initialCat = ALL, initial
               <p className="text-[10px] opacity-70 mb-4 leading-relaxed">Our engineers are available for photometric planning.</p>
               <Link href="/contact" className="text-[10px] font-bold border-b border-white/30 pb-1 hover:border-white transition-all">Talk to Expert</Link>
             </div>
-            <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+            <div className="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12),transparent_70%)]" />
           </div>
         </div>
       </aside>

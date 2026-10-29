@@ -3,7 +3,7 @@ import { Chat, Download, Mail } from "./icons";
 
 export function FloatingActions({ whatsapp }: { whatsapp: string }) {
   return (
-    <div className="no-print fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40 flex flex-col gap-3 md:gap-4 anim-float-hero">
+    <div className="no-print fixed bottom-6 right-6 md:bottom-8 md:right-8 z-40 flex flex-col gap-3 md:gap-4">
       <a href={whatsapp} target="_blank" rel="noopener" aria-label="WhatsApp" className="w-12 h-12 md:w-14 md:h-14 glass-fab rounded-full flex items-center justify-center">
         <Chat />
       </a>
