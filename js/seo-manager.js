@@ -1,4 +1,4 @@
-import { db, doc, getDoc } from "../firebase-init.js";
+import { db, doc, getDoc } from "../supabase-init.js";
 
 window.updateSEOMeta = async function(customPath) {
     try {

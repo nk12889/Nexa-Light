@@ -1,4 +1,4 @@
-import { db, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc } from "../firebase-init.js";
+import { db, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, signIn, signOut, getSession, isAdmin, updateAdminLogin } from "../supabase-init.js";
 
         // Core DB variables
         let allProductsDb = {};
@@ -111,47 +111,33 @@ import { db, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc } fr
             mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3485.498426038843!2d77.0142981!3d29.1203099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390db17d2da53ea3%3A0x2a98f1f7bd84b2c1!2sGanaur%2C%20Haryana!5e0!3m2!1sen!2sin!4v1718453400000!5m2!1sen!2sin"
         };
 
-        function checkAuth() {
-            if (localStorage.getItem('adminSession') === 'active') {
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('admin-layout').classList.remove('hidden');
-                loadDatabase();
-                switchTab(currentTab);
-            }
+        async function checkAuth() {
+            try {
+                if (await getSession() && await isAdmin()) {
+                    document.getElementById('login-view').classList.add('hidden');
+                    document.getElementById('admin-layout').classList.remove('hidden');
+                    loadDatabase();
+                    switchTab(currentTab);
+                }
+            } catch (err) { console.error(err); }
         }
 
-        const cyrb53 = (str, seed = 0) => {
-            let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-            for (let i = 0, ch; i < str.length; i++) {
-                ch = str.charCodeAt(i);
-                h1 = Math.imul(h1 ^ ch, 2654435761);
-                h2 = Math.imul(h2 ^ ch, 1597334677);
-            }
-            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
-            h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
-            h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-            return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
-        };
 
         
 window.handleLogin = async function(e) {
     e.preventDefault();
-    const id = document.getElementById("admin-id").value.trim();
-    const pass = document.getElementById("admin-pass").value.trim();
+    const email = document.getElementById("admin-id").value.trim();
+    const pass = document.getElementById("admin-pass").value;
     
-    const token = cyrb53(id + ":" + pass);
-    let validToken = "11c038d12c15ec"; // default fallback
-    
+    let ok = false;
     try {
-        const credSnap = await getDocs(collection(db, "settings"));
-        credSnap.forEach(d => {
-            if (d.id === "credentials") validToken = d.data().hash;
-        });
+        await signIn(email, pass);
+        ok = await isAdmin();
+        if (!ok) await signOut(); // valid Supabase user, but not in admin_users
     } catch(err) { console.error(err); }
 
-    if (token === validToken) {
-        localStorage.setItem("adminSession", "active");
+    if (ok) {
+        document.getElementById("login-error").classList.add("hidden");
         document.getElementById("login-view").classList.add("hidden");
         document.getElementById("admin-layout").classList.remove("hidden");
         loadDatabase();
@@ -163,8 +149,8 @@ window.handleLogin = async function(e) {
     }
 };
 
-        function logout() {
-            localStorage.removeItem('adminSession');
+        async function logout() {
+            await signOut();
             location.reload();
         }
 
@@ -202,21 +188,15 @@ window.handleLogin = async function(e) {
                 seoData = {};
                 seoSnapshot.forEach(doc => { seoData[doc.id] = doc.data(); });
 
-                console.log("Database loaded from Firebase!");
+                console.log("Database loaded from Supabase!");
                 if(currentTab) switchTab(currentTab);
             } catch(e) {
                 console.error("Error loading DB:", e);
-                showToast("Failed to load database from Firebase", "error");
+                showToast("Failed to load database", "error");
             }
         };
 
 
-
-        function saveDatabase() {
-            localStorage.setItem('nexa_products', JSON.stringify(allProductsDb));
-            localStorage.setItem('nexa_categories', JSON.stringify(categoriesData));
-            localStorage.setItem('nexa_settings', JSON.stringify(siteSettings));
-        }
 
         function showToast(msg, type = 'success') {
             const container = document.getElementById('toast-container');
@@ -456,11 +436,11 @@ window.handleLogin = async function(e) {
 
                             <div class="mt-8 pt-8 border-t border-black/5">
                                 <h3 class="text-xl font-medium tracking-tight mb-1">Admin Credentials</h3>
-                                <p class="text-sm text-secondary mb-6">Update your login username and password. Next time you login, use these credentials.</p>
+                                <p class="text-sm text-secondary mb-6">Change the email and/or password you sign in with. A new email must be confirmed from your inbox.</p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div>
-                                        <label class="block text-xs font-semibold uppercase tracking-widest text-secondary mb-2">New Username</label>
-                                        <input type="text" id="set-admin-id" placeholder="Leave blank to keep current" class="w-full bg-surfaceLight border border-black/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors">
+                                        <label class="block text-xs font-semibold uppercase tracking-widest text-secondary mb-2">New Email</label>
+                                        <input type="email" id="set-admin-id" placeholder="Leave blank to keep current" class="w-full bg-surfaceLight border border-black/10 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold uppercase tracking-widest text-secondary mb-2">New Password</label>
@@ -469,7 +449,7 @@ window.handleLogin = async function(e) {
                                 </div>
                             <div class="mt-8 pt-8 border-t border-black/5">
                                 <h3 class="text-xl font-medium tracking-tight mb-1 text-red-600">Advanced Data Migration</h3>
-                                <p class="text-sm text-secondary mb-6">Use this to automatically download all external Unsplash/dummy images to the Hostinger server and update your Firebase database.</p>
+                                <p class="text-sm text-secondary mb-6">Use this to automatically download all external Unsplash/dummy images to the Hostinger server and update the database.</p>
                                 <button type="button" onclick="migrateAllImages()" id="btn-migrate" class="bg-red-50 text-red-600 border border-red-200 px-6 py-3 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors shadow-sm">Start Complete Migration</button>
                                 <div id="migrate-status" class="text-xs text-secondary mt-2"></div>
                             </div>
@@ -522,7 +502,7 @@ window.handleLogin = async function(e) {
                     }
                     
                     await deleteDoc(doc(db, "products", id));
-                    showToast("Product deleted from Firebase");
+                    showToast("Product deleted");
                     
                     oldImages.forEach(img => {
                         if (img && img.startsWith('/uploads/')) {
@@ -604,29 +584,6 @@ window.handleLogin = async function(e) {
                 loadDatabase();
             } catch(e) { console.error(e); showToast("Failed to delete", "error"); }
         };
-
-        function saveSettings(e) {
-            e.preventDefault();
-            siteSettings = {
-                email: document.getElementById('set-email').value,
-                phone: document.getElementById('set-phone').value,
-                whatsapp: document.getElementById('set-wa').value,
-                location: document.getElementById('set-loc').value,
-                mapEmbed: document.getElementById('set-map').value
-            };
-            
-            const newId = document.getElementById('set-admin-id')?.value.trim();
-            const newPass = document.getElementById('set-admin-pass')?.value.trim();
-            if (newId && newPass) {
-                localStorage.setItem('nexa_admin_token', cyrb53(newId + ':' + newPass));
-                document.getElementById('set-admin-id').value = '';
-                document.getElementById('set-admin-pass').value = '';
-                showToast("Admin credentials updated!", "success");
-            }
-
-            saveDatabase();
-            showToast("System configuration saved");
-        }
 
         // Modal Logic
         function openProductModal(id = null) {
@@ -1107,7 +1064,6 @@ window.addNewImageField = addNewImageField;
 window.updateImageValue = updateImageValue;
 window.moveImage = moveImage;
 window.removeTempImage = removeTempImage;
-window.saveSettings = saveSettings;
 window.closeCropModal = closeCropModal;
 window.confirmCrop = confirmCrop;
 
@@ -1177,7 +1133,7 @@ window.saveProduct = async function(e, isEdit) {
 
     try {
         await setDoc(doc(db, "products", id), data);
-        showToast("Product saved successfully to Firebase!");
+        showToast("Product saved successfully!");
         
         for (let oldImg of tempInitialImages) {
             if (oldImg && !finalImages.includes(oldImg) && oldImg.startsWith('/uploads/')) {
@@ -1193,7 +1149,7 @@ window.saveProduct = async function(e, isEdit) {
         loadDatabase(); // Reload UI
     } catch(err) {
         console.error(err);
-        showToast("Error saving to Firebase", "error");
+        showToast("Error saving to database", "error");
     }
 };
 
@@ -1237,16 +1193,15 @@ window.saveSettings = async function(e) {
     try {
         await setDoc(doc(db, "settings", "config"), data);
         
-        const newId = document.getElementById("set-admin-id")?.value.trim();
-        const newPass = document.getElementById("set-admin-pass")?.value.trim();
-        if (newId && newPass) {
-            const hash = cyrb53(newId + ":" + newPass);
-            await setDoc(doc(db, "settings", "credentials"), { hash: hash });
-            showToast("Admin credentials updated!", "success");
+        const newEmail = document.getElementById("set-admin-id")?.value.trim();
+        const newPass = document.getElementById("set-admin-pass")?.value;
+        if (newEmail || newPass) {
+            await updateAdminLogin({ email: newEmail, password: newPass });
+            showToast(newEmail ? "Admin login updated! Confirm the new email from your inbox." : "Admin password updated!", "success");
             document.getElementById("set-admin-id").value = "";
             document.getElementById("set-admin-pass").value = "";
         } else {
-            showToast("Settings saved to Firebase!");
+            showToast("Settings saved!");
         }
         
         loadDatabase();

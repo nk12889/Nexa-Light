@@ -1,6 +1,3 @@
-# Firebase web config lives only on the server (see firebase-init.example.js)
-firebase-init.js
-
 # Admin-uploaded images are managed on the server, not in Git
 uploads/
 

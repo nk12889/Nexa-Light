@@ -758,7 +758,7 @@
 <body class="selection:bg-accent selection:text-white relative">
 
 <script type="module">
-import { db, collection, getDocs, onSnapshot } from "./firebase-init.js";
+import { db, collection, getDocs, onSnapshot } from "./supabase-init.js";
 window.db = db;
 window.collection = collection;
 window.getDocs = getDocs;
@@ -798,7 +798,7 @@ function loadFrontendData() {
             if (typeof render === 'function' && window.location.pathname === '/journal') render(window.location.pathname, false);
         });
     } catch(err) {
-        console.error("Error setting up Firebase listeners:", err);
+        console.error("Error setting up database listeners:", err);
     }
 }
 loadFrontendData();
@@ -1081,10 +1081,10 @@ loadFrontendData();
 
     <script>
         // ==========================================
-        // 💾 GLOBAL STATE (populated from Firebase via onSnapshot)
+        // 💾 GLOBAL STATE (populated from Supabase via onSnapshot)
         // ==========================================
 
-        // Clear any stale localStorage product/category data that may conflict with Firebase
+        // Clear any stale localStorage product/category data that may conflict with the database
         localStorage.removeItem('nexa_products');
         localStorage.removeItem('nexa_categories');
         localStorage.removeItem('nexa_deleted_products');
@@ -3224,7 +3224,7 @@ loadFrontendData();
 
             toggleProductStatus: async function (id) {
                 if (!allProductsDb[id]) return;
-                const { updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { updateDoc, doc } = await import('/supabase-init.js');
                 const newStatus = allProductsDb[id].status === 'approved' ? 'draft' : 'approved';
                 try {
                     await updateDoc(doc(window.db, 'products', id), { status: newStatus });
@@ -3485,7 +3485,7 @@ loadFrontendData();
 
             saveProduct: async function (e, isEdit) {
                 e.preventDefault();
-                const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { setDoc, doc } = await import('/supabase-init.js');
                 const id = document.getElementById('p-id').value.trim().toLowerCase().replace(/\s+/g, '-');
 
                 if (!isEdit && allProductsDb[id]) {
@@ -3517,16 +3517,16 @@ loadFrontendData();
                     this.showToast(isEdit ? 'Product updated' : 'Product created');
                 } catch(err) {
                     console.error(err);
-                    this.showToast('Error saving to Firebase', 'error');
+                    this.showToast('Error saving to database', 'error');
                 }
             },
 
             deleteProduct: async function (id) {
                 if (confirm('Are you sure you want to delete this product?')) {
-                    const { deleteDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                    const { deleteDoc, doc } = await import('/supabase-init.js');
                     try {
                         await deleteDoc(doc(window.db, 'products', id));
-                        this.showToast('Product deleted from Firebase');
+                        this.showToast('Product deleted');
                     } catch(err) {
                         console.error(err);
                         this.showToast('Error deleting', 'error');
@@ -3535,7 +3535,7 @@ loadFrontendData();
             },
 
             duplicateProduct: async function (id) {
-                const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { setDoc, doc } = await import('/supabase-init.js');
                 const original = allProductsDb[id];
                 if (!original) return;
                 const newId = original.id + '-copy-' + Math.floor(Math.random() * 1000);
@@ -3549,7 +3549,7 @@ loadFrontendData();
 
             // --- Category Management ---
             addCategory: async function () {
-                const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { setDoc, doc } = await import('/supabase-init.js');
                 const cat = prompt('Enter new category name:');
                 if (cat && cat.trim()) {
                     try {
@@ -3559,7 +3559,7 @@ loadFrontendData();
                 }
             },
             deleteCategory: async function (cat) {
-                const { deleteDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { deleteDoc, doc } = await import('/supabase-init.js');
                 if (confirm(`Delete category "${cat}"?`)) {
                     try {
                         await deleteDoc(doc(window.db, 'categories', cat));
@@ -3568,7 +3568,7 @@ loadFrontendData();
                 }
             },
             addSubcategory: async function (cat) {
-                const { setDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { setDoc, doc } = await import('/supabase-init.js');
                 const sub = prompt(`Enter new subcategory for ${cat}:`);
                 if (sub && sub.trim()) {
                     try {
@@ -3578,7 +3578,7 @@ loadFrontendData();
                 }
             },
             deleteSubcategory: async function (cat, sub) {
-                const { updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                const { updateDoc, doc } = await import('/supabase-init.js');
                 if (confirm(`Delete subcategory "${sub}"?`)) {
                     try {
                         const updated = categoriesData[cat].filter(s => s !== sub);
