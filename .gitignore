@@ -4,3 +4,6 @@ uploads/
 # macOS metadata
 ._*
 .DS_Store
+
+# Deployment archives
+*.zip
