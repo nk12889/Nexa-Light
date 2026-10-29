@@ -9,6 +9,8 @@ const PLACEHOLDER = "https://images.unsplash.com/photo-1497366216548-37526070297
 export function media(src?: string | null): string {
   if (!src) return PLACEHOLDER;
   if (/^https?:\/\//.test(src)) return src;
+  // Product images bundled with the site (public/catalog).
+  if (src.startsWith("/catalog/")) return src;
   return `${MEDIA_BASE}/${src.replace(/^\/+/, "")}`;
 }
 
