@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Shared hosting limits processes: build with a single worker.
+  experimental: { cpus: 1 },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
