@@ -69,9 +69,9 @@ export type BlogArticle = {
 export type Seo = { title?: string; description?: string };
 
 const DEFAULT_SETTINGS: Settings = {
-  email: "studio@nexalight.com",
-  phone: "+1 800 555 0199",
-  whatsapp: "https://wa.me/18005550199",
+  email: "info@nexalight.in",
+  phone: "+91 81082 09914",
+  whatsapp: "https://wa.me/918108209914",
   location: "Design Studio, Ganaur, Haryana, India",
   mapEmbed:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3485.498426038843!2d77.0142981!3d29.1203099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390db17d2da53ea3%3A0x2a98f1f7bd84b2c1!2sGanaur%2C%20Haryana!5e0!3m2!1sen!2sin!4v1718453400000!5m2!1sen!2sin",

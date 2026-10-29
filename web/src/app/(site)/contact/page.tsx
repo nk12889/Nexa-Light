@@ -19,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const s = await getSettings();
   const cards = [
-    { href: s.whatsapp, external: true, title: "WhatsApp Chat", text: "Instant specification help & support", icon: <WhatsApp className="sm:w-7 sm:h-7" />, iconClass: "bg-[#25d366]/10 text-[#25d366] group-hover:bg-white/10" },
-    { href: telHref(s.phone), title: "Voice Call", text: "Speak directly with our engineering team", icon: <Phone />, iconClass: "bg-primary/5 text-primary group-hover:bg-white/10 group-hover:text-white" },
-    { href: `mailto:${s.email}`, title: "Direct Email", text: "Send drawings, photometrics & inquiries", icon: <Mail />, iconClass: "bg-primary/5 text-primary group-hover:bg-white/10 group-hover:text-white" },
+    { href: s.whatsapp, external: true, title: "WhatsApp", value: s.phone, text: "Instant specification help & support", icon: <WhatsApp className="sm:w-7 sm:h-7" />, iconClass: "bg-[#25d366]/10 text-[#25d366] group-hover:bg-white/10" },
+    { href: telHref(s.phone), title: "Call", value: s.phone, text: "Speak directly with our team", icon: <Phone />, iconClass: "bg-primary/5 text-primary group-hover:bg-white/10 group-hover:text-white" },
+    { href: `mailto:${s.email}`, title: "Email", value: s.email, text: "Send drawings, photometrics & inquiries", icon: <Mail />, iconClass: "bg-primary/5 text-primary group-hover:bg-white/10 group-hover:text-white" },
   ];
 
   return (
@@ -68,8 +68,9 @@ export default async function ContactPage() {
             >
               <div className="flex items-center gap-4 sm:gap-6">
                 <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${c.iconClass}`}>{c.icon}</div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-medium tracking-tight">{c.title}</h4>
+                <div className="min-w-0">
+                  <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-secondary group-hover:text-white/60 transition-colors">{c.title}</h4>
+                  <p className="text-lg sm:text-2xl font-medium tracking-tight break-all">{c.value}</p>
                   <p className="text-[10px] sm:text-xs text-secondary group-hover:text-white/60 transition-colors">{c.text}</p>
                 </div>
               </div>
